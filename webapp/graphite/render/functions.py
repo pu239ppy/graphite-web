@@ -1090,6 +1090,31 @@ def perSecond(requestContext, seriesList, maxValue=None):
     results.append(newSeries)
   return results
 
+def mad(requestContext, seriesList):
+  """
+  For each series selected display a corrsponding MAD
+
+  Example:
+
+  .. code-block:: none
+
+    &target=mad(cpu.utilization.perMinute)
+
+  This would start at zero on the left side of the graph, adding the cpu sample each
+  minute, and show the MAD line for the time period selected
+  """
+  import operator
+  results = []
+  for originalSeries in seriesList:
+    mean = reduce(operator.add, [val for val in originalSeries]) / len(originalSeries)
+    mad = reduce(operator.add, [ val - mean for val in originalSeries ]) / len(originalSeries)
+    mad_series = [mad] * len(originalSeries)
+    newName = "MAD(%s)" % originalSeries.name
+    newSeries = TimeSeries(newName, originalSeries.start, originalSeries.end, originalSeries.step, newValues)
+    newSeries.pathExpression = newName
+    results.append(newSeries)
+  return results
+
 def integral(requestContext, seriesList):
   """
   This will show the sum over time, sort of like a continuous addition function.

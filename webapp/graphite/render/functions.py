@@ -1107,7 +1107,7 @@ def mad(requestContext, seriesList):
   results = []
   for originalSeries in seriesList:
     mean = reduce(operator.add, [val for val in originalSeries]) / len(originalSeries)
-    mad = reduce(operator.add, [ val - mean for val in originalSeries ]) / len(originalSeries)
+    mad = reduce(operator.add, [ abs(val - mean) for val in originalSeries ]) / len(originalSeries)
     mad_series = [mad] * len(originalSeries)
     newName = "MAD(%s)" % originalSeries.name
     newSeries = TimeSeries(newName, originalSeries.start, originalSeries.end, originalSeries.step, newValues)

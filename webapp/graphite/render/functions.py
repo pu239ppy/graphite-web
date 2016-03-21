@@ -3560,6 +3560,7 @@ SeriesFunctions = {
   'absolute': absolute,
 
   # Calculate functions
+  'mad': mad,
   'movingAverage': movingAverage,
   'movingMedian': movingMedian,
   'stdev': stdev,

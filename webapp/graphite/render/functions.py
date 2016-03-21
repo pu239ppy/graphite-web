@@ -1106,13 +1106,14 @@ def mad(requestContext, seriesList):
   import operator
   results = []
   for originalSeries in seriesList:
-    mean = reduce(operator.add, [val for val in originalSeries]) / len(originalSeries)
-    mad = reduce(operator.add, [ abs(val - mean) for val in originalSeries ]) / len(originalSeries)
+    mean = reduce(operator.add, [val for val in originalSeries if val is not None], 0) / len(originalSeries)
+    mad = reduce(operator.add, [ abs(val - mean) for val in originalSeries if val is not None], 0) / len(originalSeries)
     mad_series = [mad] * len(originalSeries)
     newName = "MAD(%s)" % originalSeries.name
-    newSeries = TimeSeries(newName, originalSeries.start, originalSeries.end, originalSeries.step, newValues)
+    newSeries = TimeSeries(newName, originalSeries.start, originalSeries.end, originalSeries.step, mad_series)
     newSeries.pathExpression = newName
     results.append(newSeries)
+    results.append(originalSeries)
   return results
 
 def integral(requestContext, seriesList):

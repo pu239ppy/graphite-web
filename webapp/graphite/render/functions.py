@@ -1,5 +1,3 @@
-#Copyright 2008 Orbitz WorldWide
-#
 #Licensed under the Apache License, Version 2.0 (the "License");
 #you may not use this file except in compliance with the License.
 #You may obtain a copy of the License at
@@ -1106,10 +1104,9 @@ def mad(requestContext, seriesList):
   import operator
   results = []
   for originalSeries in seriesList:
-    point_count = int((originalSeries.end - originalSeries.start) / originalSeries.step)
-    mean = reduce(operator.add, [val for val in originalSeries if val is not None], 0) / point_count
-    mad = reduce(operator.add, [ abs(val - mean) for val in originalSeries if val is not None], 0) / point_cont
-    mad_series = [mad] * len(originalSeries)
+    mean = safevg(originalSeries)
+    mad_val = safeDiv(safeSum([safeAbs(safeSubtract(val, mean)) for val in originalSeries]), safeLen(originalSeries)) 
+    mad_series = [mad_val] * len(originalSeries)
     newName = "MAD(%s)" % originalSeries.name
     newSeries = TimeSeries(newName, originalSeries.start, originalSeries.end, originalSeries.step, mad_series)
     newSeries.pathExpression = newName

@@ -1104,7 +1104,7 @@ def mad(requestContext, seriesList):
   import operator
   results = []
   for originalSeries in seriesList:
-    mean = safevg(originalSeries)
+    mean = safeAvg(originalSeries)
     mad_val = safeDiv(safeSum([safeAbs(safeSubtract(val, mean)) for val in originalSeries]), safeLen(originalSeries)) 
     mad_series = [mad_val] * len(originalSeries)
     newName = "MAD(%s)" % originalSeries.name

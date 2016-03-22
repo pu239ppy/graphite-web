@@ -1101,17 +1101,15 @@ def mad(requestContext, seriesList):
   This would start at zero on the left side of the graph, adding the cpu sample each
   minute, and show the MAD line for the time period selected
   """
-  import operator
   results = []
   for originalSeries in seriesList:
     mean = safeAvg(originalSeries)
     mad_val = safeDiv(safeSum([safeAbs(safeSubtract(val, mean)) for val in originalSeries]), safeLen(originalSeries)) 
-    mad_series = [mad_val] * len(originalSeries)
+    mad_series = [mad_val] * safeLen(originalSeries)
     newName = "MAD(%s)" % originalSeries.name
     newSeries = TimeSeries(newName, originalSeries.start, originalSeries.end, originalSeries.step, mad_series)
     newSeries.pathExpression = newName
     results.append(newSeries)
-    results.append(originalSeries)
   return results
 
 def integral(requestContext, seriesList):
